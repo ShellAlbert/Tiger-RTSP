@@ -80,7 +80,7 @@ UserAuthenticationDatabase* createUserAuthenticationDatabase(const std::list<std
             std::string user;
             getline(is, user, ':');
             std::string password;
-            getline(is, password);
+            getline(is, password,'\n');
             auth->addUserRecord(user.c_str(), password.c_str());
         }
     }
@@ -287,15 +287,16 @@ void decodeMulticastUrl(const std::string & maddr, in_addr & destinationAddress,
 void decodeDevice(const std::string & device, std::string & videoDev, std::string & audioDev)
 {
     std::istringstream is(device);
-    getline(is, videoDev, ',');
-    getline(is, audioDev);
+    getline(is,videoDev, ',');
+    getline(is,audioDev,'\n');
 }
 
 std::string getDeviceName(const std::string & devicePath)
 {
     std::string deviceName(devicePath);
     size_t pos = deviceName.find_last_of('/');
-    if (pos != std::string::npos) {
+    if (pos != std::string::npos)
+    {
         deviceName.erase(0,pos+1);
     }
     return deviceName;
@@ -306,14 +307,18 @@ std::string getDeviceName(const std::string & devicePath)
 **  get a "deviceid" from uevent sys file
 ** -------------------------------------------------------------------------*/
 #ifdef HAVE_ALSA	
-std::string getDeviceId(const std::string& evt) {
+std::string getDeviceId(const std::string& evt)
+{
     std::string deviceid;
     std::istringstream f(evt);
     std::string key;
-    while (getline(f, key, '=')) {
+    while(getline(f,key,'='))
+    {
         std::string value;
-        if (getline(f, value)) {
-            if ( (key =="PRODUCT") || (key == "PCI_SUBSYS_ID") ) {
+        if (getline(f,value,'\n'))
+        {
+            if ((key =="PRODUCT") || (key == "PCI_SUBSYS_ID") )
+            {
                 deviceid = value;
                 break;
             }
@@ -350,11 +355,14 @@ std::string  getV4l2Alsa(const std::string& v4l2device) {
 
     std::map<std::string,std::string> audiodevices;
     int rcard = -1;
-    while ( (snd_card_next(&rcard) == 0) && (rcard>=0) ) {
+    while ( (snd_card_next(&rcard) == 0) && (rcard>=0) )
+    {
         void **hints = NULL;
-        if (snd_device_name_hint(rcard, "pcm", &hints) >= 0) {
+        if (snd_device_name_hint(rcard, "pcm", &hints) >= 0)
+        {
             void **str = hints;
-            while (*str) {
+            while (*str)
+            {
                 std::ostringstream os;
                 os << "/sys/class/sound/card" << rcard << "/device/uevent";
 
@@ -363,8 +371,10 @@ std::string  getV4l2Alsa(const std::string& v4l2device) {
                 deviceid.erase(deviceid.find_last_not_of("\n")+1);
                 deviceid = getDeviceId(deviceid);
 
-                if (!deviceid.empty()) {
-                    if (audiodevices.find(deviceid) == audiodevices.end()) {
+                if (!deviceid.empty())
+                {
+                    if (audiodevices.find(deviceid) == audiodevices.end())
+                    {
                         std::string audioname = snd_device_name_get_hint(*str, "NAME");
                         audiodevices[deviceid] = audioname;
                     }
@@ -378,10 +388,12 @@ std::string  getV4l2Alsa(const std::string& v4l2device) {
     }
 
     auto deviceId  = videodevices.find(getDeviceName(v4l2device));
-    if (deviceId != videodevices.end()) {
+    if (deviceId != videodevices.end())
+    {
         auto audioDeviceIt = audiodevices.find(deviceId->second);
 
-        if (audioDeviceIt != audiodevices.end()) {
+        if (audioDeviceIt != audiodevices.end())
+        {
             audioDevice = audioDeviceIt->second;
             std::cout <<  v4l2device << "=>" << audioDevice << std::endl;
         }

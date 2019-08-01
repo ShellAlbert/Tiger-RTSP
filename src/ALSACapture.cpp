@@ -135,6 +135,13 @@ size_t ALSACapture::read(char* buffer, size_t bufferSize)
 
 		snd_pcm_sframes_t ret = snd_pcm_readi (m_pcm, buffer, m_periodSize*fmt_phys_width_bytes);
 		LOG(DEBUG) << "ALSA buffer in_size:" << m_periodSize*fmt_phys_width_bytes << " read_size:" << ret;
+
+        LOG(NOTICE) << "read pcm bytes:"<<ret;
+        //here read pcm from ALSA device.
+        //so we should put noise suppression code here.
+        //this work will be done after porting to jetson tx2 platform.
+
+
 		if (ret > 0) {
 			size = ret;				
 			

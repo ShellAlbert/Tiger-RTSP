@@ -34,7 +34,12 @@ SOURCES += main.cpp\
     src/MulticastServerMediaSubsession.cpp \
     src/ServerMediaSubsession.cpp \
     src/TSServerMediaSubsession.cpp \
-    src/UnicastServerMediaSubsession.cpp
+    src/UnicastServerMediaSubsession.cpp \
+    libv4l2wrapper/src/logger.cpp  \
+    libv4l2wrapper/src/V4l2Capture.cpp  \
+    libv4l2wrapper/src/V4l2Device.cpp  \
+    libv4l2wrapper/src/V4l2MmapDevice.cpp  \
+    libv4l2wrapper/src/V4l2Output.cpp
 
 HEADERS  += zmainwidget.h \
     inc/AddH26xMarkerFilter.h \
@@ -239,6 +244,5 @@ INCLUDEPATH += $$PWD/live555/groupsock
 INCLUDEPATH += $$PWD/live555/liveMedia
 
 LIBS += -L$$PWD/live555/lib -llive555
-LIBS += -L$$PWD/libv4l2wrapper/lib -lv4l2wrapper
 LIBS += -lasound
 

@@ -459,14 +459,14 @@ int main(int argc, char** argv)
     if(1)
     {
          //camera default parameters. h264:1920x1080@30fps.
-        std::string videoDev="/dev/video2";
+        std::string videoDev="/dev/video0";
+        //std::string videoDev="/dev/video2";
 
-        std::list<unsigned int> videoformatList;
-        videoformatList.push_back(V4L2_PIX_FMT_H264);
-        videoformatList.push_back(V4L2_PIX_FMT_MJPEG);
+//        std::list<unsigned int> videoformatList;
+//        videoformatList.push_back(V4L2_PIX_FMT_H264);
 
-        int width=1920;//V4L2 camera width.
-        int height=1080;//V4L2 camera height.
+        int width=1280;//V4L2 camera width.
+        int height=720;//V4L2 camera height.
         int fps=30;//V4L2 camera framerate.
 
         int verbose=0;//no verbose.
@@ -475,7 +475,7 @@ int main(int argc, char** argv)
 
         qDebug()<<"<info>:create video source:"<<videoDev.c_str();
 
-        V4L2DeviceParameters param(videoDev.c_str(),videoformatList,width,height,fps,verbose);
+        V4L2DeviceParameters param(videoDev.c_str(),V4L2_PIX_FMT_H264,width,height,fps,verbose);
         V4l2Capture* videoCapture=V4l2Capture::create(param,ioTypeIn);
         if (videoCapture)
         {
